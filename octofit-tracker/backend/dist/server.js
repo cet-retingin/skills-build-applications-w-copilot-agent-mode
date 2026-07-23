@@ -33,10 +33,16 @@ function createServer() {
 function startServer() {
     const app = createServer();
     const { baseUrl, port: PORT } = (0, api_1.getApiConfig)();
+    const codespaceUrl = process.env.CODESPACE_NAME
+        ? `https://${process.env.CODESPACE_NAME}-8000.app.github.dev`
+        : null;
     app.listen(PORT, () => {
         console.log(`🚀 OctoFit Tracker Backend running at ${baseUrl}`);
         console.log(`Server listening on port ${PORT}`);
         console.log(`CODESPACE_NAME: ${process.env.CODESPACE_NAME || 'localhost'}`);
+        if (codespaceUrl) {
+            console.log(`Codespaces URL: ${codespaceUrl}`);
+        }
     });
 }
 exports.default = createServer;
