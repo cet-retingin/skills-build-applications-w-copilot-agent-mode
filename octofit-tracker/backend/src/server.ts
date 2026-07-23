@@ -1,4 +1,5 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
+import cors from 'cors';
 import { getApiConfig } from './config/api';
 
 export function createServer(): Express {
@@ -6,11 +7,21 @@ export function createServer(): Express {
   const { baseUrl, port: PORT } = getApiConfig();
 
   // Middleware
+  app.use(cors());
   app.use(express.json());
 
   console.log(`\n📍 API Base URL: ${baseUrl}\n`);
 
   // Health check
+  app.get('/', (_req: Request, res: Response) => {
+    res.json({
+      message: 'OctoFit Tracker API',
+      health: '/health',
+      users: '/api/users',
+      activities: '/api/activities',
+    });
+  });
+
   app.get('/health', (req: Request, res: Response) => {
     res.json({ status: 'OK', message: 'OctoFit Tracker API is running' });
   });

@@ -6,14 +6,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createServer = createServer;
 exports.startServer = startServer;
 const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
 const api_1 = require("./config/api");
 function createServer() {
     const app = (0, express_1.default)();
     const { baseUrl, port: PORT } = (0, api_1.getApiConfig)();
     // Middleware
+    app.use((0, cors_1.default)());
     app.use(express_1.default.json());
     console.log(`\n📍 API Base URL: ${baseUrl}\n`);
     // Health check
+    app.get('/', (_req, res) => {
+        res.json({
+            message: 'OctoFit Tracker API',
+            health: '/health',
+            users: '/api/users',
+            activities: '/api/activities',
+        });
+    });
     app.get('/health', (req, res) => {
         res.json({ status: 'OK', message: 'OctoFit Tracker API is running' });
     });
